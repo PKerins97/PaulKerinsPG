@@ -10,11 +10,7 @@ public  class MainCharcterScrpit : MonoBehaviour
     private float turning_speed = 90;
     private float mouse_sesitivity_x = 1;
     Animator char_animation;
-    private Vector3 jump ;
-    private float jumpforce = 8f ;
-    private float jumpheight;
-    private float gravitySpeed = 30f ;
-    private bool isGrounded;
+    private bool isGrounded= true;
     PlayerCameraScript my_camera;
     private Rigidbody rigg;
 
@@ -27,7 +23,7 @@ public  class MainCharcterScrpit : MonoBehaviour
         my_camera = GetComponentInChildren<PlayerCameraScript>();
         my_camera.you_belong_to(this);
         rigg = GetComponent<Rigidbody>();
-        jump = new Vector3(0f, jumpheight, 0f);
+        
 ;    }
     
     void Update()
@@ -42,22 +38,24 @@ public  class MainCharcterScrpit : MonoBehaviour
         turn(Input.GetAxis("Horizontal"));
         adjust_camera(Input.GetAxis("Vertical"));
 
-        if(rigg.velocity.y <= 0)
+        if (Input.GetKey(KeyCode.Space) && isGrounded )
         {
-            if (Input.GetKey(KeyCode.Space)&& isGrounded)
-            {
-                rigg.AddForce(jump * jumpforce, ForceMode.Impulse);
-                isGrounded = true;
-            }
+            rigg.AddForce(new Vector3(0, 5, 0), ForceMode.Impulse);
+            isGrounded = false;
         }
-
-        
     }
 
-    private void OnCollisionEnter(Collision other)
+    private void OnCollisionEnter(Collision collision)
     {
-        if (other.gameObject.tag == "floor")
+        if(collision.gameObject.tag == "Floor")
+        {
             isGrounded = true;
+        }
+        if(collision.gameObject.transform.tag == "floor")
+        {
+            rigg.rotation = Quaternion.identity;
+        }
+
     }
 
     private void adjust_camera(float vertical_adjustment)
@@ -70,7 +68,7 @@ public  class MainCharcterScrpit : MonoBehaviour
     private void turn(float mouse_turn_value_x)
     {
         transform.Rotate(Vector3.up, mouse_sesitivity_x * mouse_turn_value_x * Time.deltaTime);
-        if(Mathf.Abs(mouse_turn_value_x)>0.5f)char_animation.SetBool("walking_backwards", true);
+        if(Mathf.Abs(mouse_turn_value_x)>0.2f)char_animation.SetBool("walking_backwards", true);
     }
 
     private void turn_left()
