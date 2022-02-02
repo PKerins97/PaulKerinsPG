@@ -11,7 +11,7 @@ public class PlayerCameraScript : MonoBehaviour
     private Vector3 desired_camera_position;
     Transform owning_character_transform;
     private MainCharcterScrpit owning_character;
-    private float SENSITIVITY_VERTICAL_ROTATE = 0.05f;
+    private float SENSITIVITY_VERTICAL_ROTATE = 0.02f;
     private float focal_height = 1f;
 
     // Start is called before the first frame update
