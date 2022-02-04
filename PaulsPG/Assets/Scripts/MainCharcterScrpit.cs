@@ -30,8 +30,11 @@ public  class MainCharcterScrpit : MonoBehaviour
     {
         char_animation.SetBool("running_forward", false);
         char_animation.SetBool("walking_backwards", false);
+        char_animation.SetBool("jumping", false);
+        char_animation.SetBool("jump_landing", false);
 
-        
+
+
         if (should_move_forward()) move_forward();
         if (should_move_backward()) move_backward();
         //if (should_turn_left()) turn_left();
@@ -41,21 +44,22 @@ public  class MainCharcterScrpit : MonoBehaviour
         if (Input.GetKey(KeyCode.Space) && isGrounded )
         {
             rigg.AddForce(new Vector3(0, 5, 0), ForceMode.Impulse);
+            char_animation.SetBool("jumping", true);
+           
             isGrounded = false;
         }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.tag == "Floor")
+        if(collision.gameObject.tag == "floor")
         {
+            char_animation.SetBool("jump_landing", true);
             isGrounded = true;
+            
         }
-        if(collision.gameObject.transform.tag == "floor")
-        {
-            rigg.rotation = Quaternion.identity;
-        }
-
+       
+        
     }
 
     private void adjust_camera(float vertical_adjustment)
