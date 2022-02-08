@@ -6,9 +6,9 @@ using UnityEngine;
 public  class MainCharcterScrpit : MonoBehaviour
 {
     private float current_speed;
-    private float BACKWARDS_SPEED = 1, RUNNING_SPEED = 3;
+    private float BACKWARDS_SPEED = 1, RUNNING_SPEED = 5;
     private float turning_speed = 90;
-    private float mouse_sesitivity_x = 1;
+    private float mouse_sesitivity_x = 0.5f;
     Animator char_animation;
     private bool isGrounded= true;
     PlayerCameraScript my_camera;
@@ -31,7 +31,7 @@ public  class MainCharcterScrpit : MonoBehaviour
         char_animation.SetBool("running_forward", false);
         char_animation.SetBool("walking_backwards", false);
         char_animation.SetBool("jumping", false);
-        char_animation.SetBool("jump_landing", false);
+       
 
 
 
@@ -45,15 +45,18 @@ public  class MainCharcterScrpit : MonoBehaviour
         {
             rigg.AddForce(new Vector3(0, 5, 0), ForceMode.Impulse);
             char_animation.SetBool("jumping", true);
-           
+            char_animation.SetBool("jump_landing", false);
             isGrounded = false;
         }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
+        print("collision");
         if(collision.gameObject.tag == "floor")
+            
         {
+            print("floor");
             char_animation.SetBool("jump_landing", true);
             isGrounded = true;
             
