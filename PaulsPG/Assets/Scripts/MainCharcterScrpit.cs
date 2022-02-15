@@ -31,6 +31,7 @@ public  class MainCharcterScrpit : MonoBehaviour
         char_animation.SetBool("running_forward", false);
         char_animation.SetBool("walking_backwards", false);
         char_animation.SetBool("jumping", false);
+        
        
 
 
@@ -47,6 +48,9 @@ public  class MainCharcterScrpit : MonoBehaviour
             char_animation.SetBool("jumping", true);
             char_animation.SetBool("jump_landing", false);
             isGrounded = false;
+        }
+        if (Input.GetKey(KeyCode.Q)) {
+            char_animation.SetBool("punch1", true);
         }
     }
 
