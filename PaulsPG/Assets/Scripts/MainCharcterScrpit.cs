@@ -13,7 +13,7 @@ public class MainCharcterScrpit : MonoBehaviour
     private bool isGrounded = true;
     PlayerCameraScript my_camera;
     private Rigidbody rigg;
-
+    public HealthBar healthBar;
 
 
 
@@ -52,7 +52,11 @@ public class MainCharcterScrpit : MonoBehaviour
             char_animation.SetBool("jump_landing", false);
             isGrounded = false;
         }
-       
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            char_animation.SetTrigger("attack");
+        }
        
 
 
@@ -68,6 +72,14 @@ public class MainCharcterScrpit : MonoBehaviour
             char_animation.SetBool("jump_landing", true);
             isGrounded = true;
 
+        }
+
+        if(collision.gameObject.tag == "Enemy")
+        {
+            if (healthBar)
+            {
+                healthBar.onTakeDamage(10);
+            }
         }
 
 
