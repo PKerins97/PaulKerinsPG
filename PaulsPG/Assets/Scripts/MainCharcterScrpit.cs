@@ -14,17 +14,21 @@ public class MainCharcterScrpit : MonoBehaviour
     PlayerCameraScript my_camera;
     private Rigidbody rigg;
     public HealthBar healthBar;
+    public bool CanAttack = true;
+    public float AttackCooldown = 0.01f;
+    public bool isAttacking = false;
+    
 
 
 
-
+    
     public GameObject MainCharacter;
     void Start()
     {
         current_speed = RUNNING_SPEED;
         char_animation = GetComponentInChildren<Animator>();
         my_camera = GetComponentInChildren<PlayerCameraScript>();
-        my_camera.you_belong_to(this);
+        
         rigg = GetComponent<Rigidbody>();
 
         ; }
@@ -43,7 +47,7 @@ public class MainCharcterScrpit : MonoBehaviour
         if (should_move_backward()) move_backward();
         //if (should_turn_left()) turn_left();
         turn(Input.GetAxis("Horizontal"));
-        adjust_camera(Input.GetAxis("Vertical"));
+        
 
         if (Input.GetKey(KeyCode.Space) && isGrounded)
         {
@@ -53,9 +57,12 @@ public class MainCharcterScrpit : MonoBehaviour
             isGrounded = false;
         }
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButton(0))
         {
-            char_animation.SetTrigger("attack");
+            if (CanAttack)
+            {
+                SwordAttack();
+            }
         }
        
 
@@ -79,16 +86,50 @@ public class MainCharcterScrpit : MonoBehaviour
             if (healthBar)
             {
                 healthBar.onTakeDamage(10);
+
+                
             }
+            
         }
 
 
     }
 
-    private void adjust_camera(float vertical_adjustment)
+    private void OnTriggerEnter(Collider other)
     {
-        my_camera.adjust_vertical_angle(vertical_adjustment);
+        if(other.tag == "Enemy" && isAttacking )
+        {
+            print(other.name);
+            other.GetComponent<Animator>().SetTrigger("Hit");
+
+        }
     }
+
+
+    public void SwordAttack()
+    {
+        isAttacking = true;
+        char_animation.SetTrigger("attack");
+        CanAttack = false;
+       
+        StartCoroutine(ResetAttackCooldown());
+
+    }
+
+    IEnumerator ResetAttackCooldown()
+    {
+        StartCoroutine(ResetAttack());
+        yield return new WaitForSeconds(AttackCooldown);
+        CanAttack = true;
+    }
+    IEnumerator ResetAttack()
+    {
+
+        yield return new WaitForSeconds(1.0f);
+        isAttacking = false;
+    }
+
+   
 
 
 
@@ -131,5 +172,7 @@ public class MainCharcterScrpit : MonoBehaviour
     {
         return Input.GetKey(KeyCode.W);
     }
+
+   
    
 }

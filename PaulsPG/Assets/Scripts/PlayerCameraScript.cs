@@ -1,43 +1,51 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
-public class PlayerCameraScript : MonoBehaviour 
-{ 
+public class PlayerCameraScript : MonoBehaviour
+{
+    private const float Y_ANGLE_MIN = 0.0f;
+    private const float Y_ANGLE_MAX = 50.0f;
 
-    float angle = 0f, distance= 5f;
-    private Vector3 desired_camera_position;
-    Transform owning_character_transform;
-    private MainCharcterScrpit owning_character;
-    private float SENSITIVITY_VERTICAL_ROTATE = 0.02f;
-    private float focal_height = 1f;
 
-    // Start is called before the first frame update
-    void Start()
+
+    public Transform lookAt;
+    public Transform camTransform;
+
+    private Camera cam;
+
+    private float distance = 10.0f;
+
+    private float currentX = 0.0f;
+    private float currentY = 0.0f;
+    private float sensitvityX = 4.0f;
+    private float sensitvityY = 1.0f;
+
+    private void Start()
     {
+
+        camTransform = transform;
+        cam = Camera.main;
+
         
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        transform.localPosition = Vector3.Lerp(transform.localPosition, desired_camera_position,0.01f);
-        transform.LookAt(owning_character_transform.position + focal_height* Vector3.up);
+        currentX += Input.GetAxis("Mouse X");
+        currentY += Input.GetAxis("Mouse Y");
+
+        currentY = Mathf.Clamp(currentY, Y_ANGLE_MIN, Y_ANGLE_MAX);
+
     }
 
-    internal void adjust_vertical_angle(float vertical_adjustment)
+    private void LateUpdate()
     {
-        angle -= SENSITIVITY_VERTICAL_ROTATE * vertical_adjustment;
-        angle = Mathf.Clamp(angle, -2,0);
+        Vector3 dir = new Vector3(0, 0, -distance);
+        Quaternion rotation = Quaternion.Euler(currentY, currentX, 0);
+        camTransform.position = lookAt.position + rotation * dir;
+        camTransform.LookAt(lookAt.position);
 
-        desired_camera_position = new Vector3(0, distance * Mathf.Cos(angle), distance * Mathf.Sin(angle));
     }
 
-    internal void you_belong_to(MainCharcterScrpit mainCharcterScrpit)
-    {
-        owning_character_transform = mainCharcterScrpit.transform;
-        owning_character = mainCharcterScrpit;
-    }
 }
