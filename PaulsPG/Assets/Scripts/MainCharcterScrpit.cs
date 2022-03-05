@@ -6,18 +6,24 @@ using UnityEngine;
 public class MainCharcterScrpit : MonoBehaviour
 {
     private float current_speed;
-    private float BACKWARDS_SPEED = 1, RUNNING_SPEED = 5;
-    private float turning_speed = 90;
+    private float BACKWARDS_SPEED = 1, RUNNING_SPEED = 5, WALKING_SPEED = 1;
+    private float turning_speed = 220;
     private float mouse_sesitivity_x = 0.05f;
     Animator char_animation;
     private bool isGrounded = true;
-    PlayerCameraScript my_camera;
+    Transform cameraT;
     private Rigidbody rigg;
     public HealthBar healthBar;
     public bool CanAttack = true;
     public float AttackCooldown = 0.01f;
     public bool isAttacking = false;
-    
+
+    public float turnTime = 0.2f;
+    public float speedTime = 0.1f;
+    float speedVelocity;
+    float currentSpeed;
+    float turnVelocity;
+
 
 
 
@@ -27,7 +33,7 @@ public class MainCharcterScrpit : MonoBehaviour
     {
         current_speed = RUNNING_SPEED;
         char_animation = GetComponentInChildren<Animator>();
-        my_camera = GetComponentInChildren<PlayerCameraScript>();
+        cameraT = Camera.main.transform;
         
         rigg = GetComponent<Rigidbody>();
 
@@ -64,8 +70,24 @@ public class MainCharcterScrpit : MonoBehaviour
                 SwordAttack();
             }
         }
-       
 
+        Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        Vector2 inputDir = input.normalized;
+
+        if(inputDir != Vector2.zero)
+        {
+            float targetRotation = Mathf.Atan2(inputDir.x, inputDir.y) * Mathf.Rad2Deg + cameraT.eulerAngles.y;
+            transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref turnVelocity, turnTime);
+        }
+
+        bool running = Input.GetKey(KeyCode.LeftShift);
+        float targetSpeed = ((running) ? RUNNING_SPEED : WALKING_SPEED) * inputDir.magnitude;
+        currentSpeed = Mathf.SmoothDamp(currentSpeed, targetSpeed, ref speedVelocity, speedTime);
+
+        transform.Translate(transform.forward * currentSpeed * Time.deltaTime, Space.World);
+
+        float animationSpeedPercent = ((running) ? 1 : .5f) * inputDir.magnitude;
+       char_animation.SetFloat("speedPercent", animationSpeedPercent, speedTime, Time.deltaTime);
 
     }
 
@@ -136,7 +158,7 @@ public class MainCharcterScrpit : MonoBehaviour
     private void turn(float mouse_turn_value_x)
     {
         transform.Rotate(Vector3.up, mouse_sesitivity_x * mouse_turn_value_x * Time.deltaTime);
-        if (Mathf.Abs(mouse_turn_value_x) > 0.2f) char_animation.SetBool("walking_backwards", true);
+        if (Mathf.Abs(mouse_turn_value_x) > 0.5f) char_animation.SetBool("walking_backwards", true);
     }
 
     private void turn_left()
