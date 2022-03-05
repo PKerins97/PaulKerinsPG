@@ -8,7 +8,7 @@ public class PlayerCameraScript : MonoBehaviour
     private const float Y_ANGLE_MAX = 50.0f;
 
 
-
+    private Vector3 offset;
     public Transform lookAt;
     public Transform camTransform;
 
@@ -21,17 +21,18 @@ public class PlayerCameraScript : MonoBehaviour
     private float sensitvityX = 4.0f;
     private float sensitvityY = 1.0f;
 
-    private void Start()
+     void Start()
     {
-
+        offset = transform.position - lookAt.transform.position;
         camTransform = transform;
         cam = Camera.main;
 
         
     }
 
-    private void Update()
+   void Update()
     {
+        transform.position = lookAt.transform.position + offset;
         currentX += Input.GetAxis("Mouse X");
         currentY += Input.GetAxis("Mouse Y");
 
@@ -39,7 +40,7 @@ public class PlayerCameraScript : MonoBehaviour
 
     }
 
-    private void LateUpdate()
+     void LateUpdate()
     {
         Vector3 dir = new Vector3(0, 0, -distance);
         Quaternion rotation = Quaternion.Euler(currentY, currentX, 0);
