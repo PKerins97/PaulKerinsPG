@@ -6,7 +6,7 @@ public class PlayerCameraScript : MonoBehaviour
 {
     public float mouseSensitivity = 10;
     public Transform target;
-    public float distanceFromTarget = 2;
+    public float distanceFromTarget = 10;
     public float rotationTime = .12f;
     Vector3 rotationVelocity;
     Vector3 currentRotation;

@@ -6,21 +6,38 @@ public class EnemyScript : MonoBehaviour
 {
 
     public Transform target;
-    public float speed = 4f;
-    Rigidbody rig;
+    public float speed = 1f;
+    Animator enemy_animation ;
+   
 
 
     // Start is called before the first frame update
     void Start()
     {
-        rig = GetComponent<Rigidbody>();
+        enemy_animation = GetComponentInChildren<Animator>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        Vector3 pos = Vector3.MoveTowards(transform.position, target.position, speed * Time.fixedDeltaTime);
-        rig.MovePosition(pos);
-        transform.LookAt(target);
+        enemy_animation.SetBool("running_forwards", true);
+        Vector3 fromMetoTarget = target.position - transform.position;
+        fromMetoTarget = new Vector3(fromMetoTarget.x, 0, fromMetoTarget.z);
+        Vector3 direction = fromMetoTarget.normalized;
+        transform.position += speed * direction * Time.deltaTime;
+        
+        transform.LookAt(transform.position + direction);
+
+
+
+    }
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Sword")
+        {
+            print("hit");
+            
+
+        }
     }
 }

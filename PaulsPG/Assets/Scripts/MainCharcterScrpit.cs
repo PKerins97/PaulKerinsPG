@@ -6,7 +6,7 @@ using UnityEngine;
 public class MainCharcterScrpit : MonoBehaviour
 {
     private float current_speed;
-    private float BACKWARDS_SPEED = 1, RUNNING_SPEED = 5, WALKING_SPEED = 1;
+    private float BACKWARDS_SPEED = 1, RUNNING_SPEED = 4, SPRINT_SPEED = 8;
     private float turning_speed = 220;
     private float mouse_sesitivity_x = 0.05f;
     Animator char_animation;
@@ -44,6 +44,9 @@ public class MainCharcterScrpit : MonoBehaviour
         char_animation.SetBool("running_forward", false);
         char_animation.SetBool("walking_backwards", false);
         char_animation.SetBool("jumping", false);
+        char_animation.SetBool("sprint", false);
+        isAttacking = false;
+        
 
 
 
@@ -80,14 +83,12 @@ public class MainCharcterScrpit : MonoBehaviour
             transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref turnVelocity, turnTime);
         }
 
-        bool running = Input.GetKey(KeyCode.LeftShift);
-        float targetSpeed = ((running) ? RUNNING_SPEED : WALKING_SPEED) * inputDir.magnitude;
-        currentSpeed = Mathf.SmoothDamp(currentSpeed, targetSpeed, ref speedVelocity, speedTime);
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
 
-        transform.Translate(transform.forward * currentSpeed * Time.deltaTime, Space.World);
-
-        float animationSpeedPercent = ((running) ? 1 : .5f) * inputDir.magnitude;
-       char_animation.SetFloat("speedPercent", animationSpeedPercent, speedTime, Time.deltaTime);
+            currentSpeed = SPRINT_SPEED;
+            char_animation.SetBool("sprint", true);
+        }
 
     }
 
