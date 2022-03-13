@@ -6,8 +6,8 @@ public class CharacterStats : MonoBehaviour
     public int maxHealth = 100;
     public int currentHealth { get; private set;  }
 
-    public Stat damage;
-    public Stat armor;
+    public int damage;
+    
 
     private void Awake()
     {
@@ -25,7 +25,7 @@ public class CharacterStats : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        damage -= armor.getValue();
+        
         damage = Mathf.Clamp(damage, 0, int.MaxValue);
 
 
