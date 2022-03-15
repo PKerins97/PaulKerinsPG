@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -188,24 +188,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 34115fd4eff069845a47d22ce756724e, type: 3}
---- !u!1 &221017719 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3966708725887359702, guid: ef692d625a130534ab152b65fe91a77b, type: 3}
-  m_PrefabInstance: {fileID: 1171707489}
-  m_PrefabAsset: {fileID: 0}
---- !u!65 &221017721
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 221017719}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 2.0295587, y: 1.9829808, z: 1}
-  m_Center: {x: 0.061391953, y: 0.9038481, z: 3.9035286e-10}
 --- !u!4 &221017723 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3966708725887190838, guid: ef692d625a130534ab152b65fe91a77b, type: 3}
@@ -509,6 +491,7 @@ GameObject:
   - component: {fileID: 902062583}
   - component: {fileID: 902062584}
   - component: {fileID: 902062585}
+  - component: {fileID: 902062586}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Enemy
@@ -524,7 +507,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 902062581}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -22.15, y: 0, z: 0.80177414}
+  m_LocalPosition: {x: -22.15, y: -0.127, z: 0.80177414}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 221017723}
@@ -576,6 +559,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   damage: 0
+--- !u!136 &902062586
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 902062581}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1001 &1171707489
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1281,7 +1278,7 @@ GameObject:
   - component: {fileID: 2040434729}
   - component: {fileID: 2040434731}
   - component: {fileID: 2040434732}
-  - component: {fileID: 2040434734}
+  - component: {fileID: 2040434733}
   m_Layer: 0
   m_Name: MainCharacter
   m_TagString: Player
@@ -1354,7 +1351,7 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1.1, z: 0}
---- !u!114 &2040434734
+--- !u!114 &2040434733
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1363,7 +1360,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2040434728}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2ea5ebaf5811a0489339285905a9c1c, type: 3}
+  m_Script: {fileID: 11500000, guid: a10a9a7ffa800114889295684be1ae04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
