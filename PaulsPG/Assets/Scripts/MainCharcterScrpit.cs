@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MainCharcterScrpit : MonoBehaviour
+public class MainCharcterScrpit : MonoBehaviour, IDamageable
 {
     private float current_speed;
     private float BACKWARDS_SPEED = 1, RUNNING_SPEED = 4, SPRINT_SPEED = 8;
@@ -17,6 +17,7 @@ public class MainCharcterScrpit : MonoBehaviour
     public bool CanAttack = true;
     public float AttackCooldown = 0.01f;
     public bool isAttacking = false;
+    
 
     public float turnTime = 0.2f;
     public float speedTime = 0.1f;
@@ -36,7 +37,7 @@ public class MainCharcterScrpit : MonoBehaviour
         cameraT = Camera.main.transform;
         
         rigg = GetComponent<Rigidbody>();
-
+        
         ; }
 
     void Update()
@@ -124,7 +125,7 @@ public class MainCharcterScrpit : MonoBehaviour
         {
             print(other.name);
             other.GetComponent<Animator>().SetTrigger("Hit");
-
+           
         }
     }
 
@@ -196,6 +197,8 @@ public class MainCharcterScrpit : MonoBehaviour
         return Input.GetKey(KeyCode.W);
     }
 
-   
-   
+    public void takeDamage(int amountOfDamage)
+    {
+        print("Ouch");
+    }
 }
