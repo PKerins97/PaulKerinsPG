@@ -67,7 +67,7 @@ public class EnemyScript : MonoBehaviour,IDamageable
                 IDamageable taregtScript =  target.GetComponent<IDamageable>();
                 if (taregtScript != null)
                 {
-                    taregtScript.takeDamage(20);
+                    taregtScript.takeDamage(10);
                 }
 
                 break;
