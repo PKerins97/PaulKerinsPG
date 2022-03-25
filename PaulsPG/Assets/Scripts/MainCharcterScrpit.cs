@@ -72,6 +72,7 @@ public class MainCharcterScrpit : MonoBehaviour, IDamageable
             if (CanAttack)
             {
                 SwordAttack();
+                
             }
         }
 
@@ -200,5 +201,6 @@ public class MainCharcterScrpit : MonoBehaviour, IDamageable
     public void takeDamage(int amountOfDamage)
     {
         print("Ouch");
+        
     }
 }
