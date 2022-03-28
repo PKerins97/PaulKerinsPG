@@ -25,6 +25,7 @@ public class MainCharcterScrpit : MonoBehaviour, IDamageable
     float currentSpeed;
     float turnVelocity;
 
+    public int points = 0;
 
 
 
@@ -76,6 +77,14 @@ public class MainCharcterScrpit : MonoBehaviour, IDamageable
             }
         }
 
+        if (Input.GetMouseButton(1))
+        {
+            if (CanAttack)
+            {
+                PunchAttack();
+            }
+        }
+
         Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         Vector2 inputDir = input.normalized;
 
@@ -111,7 +120,7 @@ public class MainCharcterScrpit : MonoBehaviour, IDamageable
             if (healthBar)
             {
                 healthBar.onTakeDamage(10);
-
+                
                 
             }
             
@@ -140,6 +149,15 @@ public class MainCharcterScrpit : MonoBehaviour, IDamageable
         StartCoroutine(ResetAttackCooldown());
 
     }
+    public void PunchAttack()
+    {
+        isAttacking = true;
+        char_animation.SetTrigger("Punch");
+        CanAttack = false;
+
+        StartCoroutine(ResetAttackCooldown());
+
+    }
 
     IEnumerator ResetAttackCooldown()
     {
@@ -154,7 +172,10 @@ public class MainCharcterScrpit : MonoBehaviour, IDamageable
         isAttacking = false;
     }
 
+    
+
    
+
 
 
 
@@ -202,5 +223,11 @@ public class MainCharcterScrpit : MonoBehaviour, IDamageable
     {
         print("Ouch");
         
+    }
+
+    private void OnGUI()
+    {
+        //Gui for Collecting Coins
+        GUI.Label(new Rect(500, 10, 100, 20), "Score: " + points);
     }
 }
