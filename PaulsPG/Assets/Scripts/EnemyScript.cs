@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemyScript : MonoBehaviour,IDamageable
 {
 
-    enum Enemy_States { Idle, Move_to_Target, Attack};
+    enum Enemy_States { Idle, Move_to_Target, Attack, Dead};
 
     Enemy_States isCurrently = Enemy_States.Idle;
 
@@ -17,7 +17,8 @@ public class EnemyScript : MonoBehaviour,IDamageable
     private float dist;
     private Rigidbody enemy;
     
-    internal int maxHealth = 60;
+   private int maxHealth = 60;
+    private int currentHealth;
 
     // Start is called before the first frame update
     void Start()
@@ -25,6 +26,7 @@ public class EnemyScript : MonoBehaviour,IDamageable
         enemy_animation = GetComponentInChildren<Animator>();
         target = GameObject.FindGameObjectWithTag("Player").transform;
 
+        currentHealth = maxHealth;
     }
 
     // Update is called once per frame
@@ -72,6 +74,14 @@ public class EnemyScript : MonoBehaviour,IDamageable
 
                 break;
 
+            case Enemy_States.Dead:
+                    if(currentHealth == 0)
+                {
+                    enemy_animation.SetBool("died", true);
+                    Destroy(gameObject);
+                }
+                break;
+
 
 
 
@@ -81,12 +91,15 @@ public class EnemyScript : MonoBehaviour,IDamageable
 
         }
 
-
+        if (Input.GetKey(KeyCode.E))
+        {
+            takeDamage(10);
+        }
     }
    
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Sword")
+        if (collision.gameObject.tag == "Player")
         {
             print("hit");
             
