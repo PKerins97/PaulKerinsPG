@@ -16,9 +16,14 @@ public class EnemyScript : MonoBehaviour,IDamageable
     public float howclose;
     private float dist;
     private Rigidbody enemy;
-    
-   private int maxHealth = 60;
-    private int currentHealth;
+    internal ManagerScript theManager;
+
+   public int MHP = 60;
+   public int CHP;
+    public int DPS = 10;
+    private float Attack_Time = 0.8f;
+    private float coolDown;
+    private IDamageable targetHealth;
 
     // Start is called before the first frame update
     void Start()
@@ -26,7 +31,7 @@ public class EnemyScript : MonoBehaviour,IDamageable
         enemy_animation = GetComponentInChildren<Animator>();
         target = GameObject.FindGameObjectWithTag("Player").transform;
 
-        currentHealth = maxHealth;
+        CHP = MHP;
     }
 
     // Update is called once per frame
@@ -59,50 +64,52 @@ public class EnemyScript : MonoBehaviour,IDamageable
                 transform.LookAt(transform.position + direction);
 
                 if (dist < 1.5f)
+                {
                     isCurrently = Enemy_States.Attack;
-
+                    enemy_animation.SetBool("running_forwards", false);
+                    enemy_animation.SetBool("attacking", true);
+                    targetHealth = target.GetComponent<IDamageable>();
+                }
                 break;
 
             case Enemy_States.Attack:
-                enemy_animation.SetBool("running_forwards", false);
-                enemy_animation.SetBool("attacking",true);
-                IDamageable taregtScript =  target.GetComponent<IDamageable>();
-                if (taregtScript != null)
+
+                coolDown -= Time.deltaTime;
+
+                if (coolDown <0f)
+                if (targetHealth != null)
                 {
-                    taregtScript.takeDamage(10);
+                    targetHealth.takeDamage(10);
+                    coolDown = Attack_Time;
                 }
+                else
+                    targetHealth = target.GetComponent<IDamageable>();
 
                 break;
 
             case Enemy_States.Dead:
-                    if(currentHealth == 0)
-                {
-                    enemy_animation.SetBool("died", true);
-                    Destroy(gameObject);
-                }
+               
+
+
                 break;
 
-
-
-
-
-           
-
-
         }
 
-        if (Input.GetKey(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.H))
         {
-            takeDamage(10);
+            takeDamage(40);
         }
     }
-   
+    internal void ImtheMan(ManagerScript manager)
+    {
+        theManager = manager;
+    }
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Player")
+        if (collision.gameObject.tag == "Weapon")
         {
             print("hit");
-            
+            takeDamage(20);
 
         }
     }
@@ -110,5 +117,15 @@ public class EnemyScript : MonoBehaviour,IDamageable
     public void takeDamage(int amountOfDamage)
     {
         print("Hit");
+        CHP -= amountOfDamage;
+
+        if (CHP <= 0) 
+        {
+           
+            enemy_animation.SetBool("died", true);
+            theManager.Im_Dead(this); 
+        }
     }
+
+    
 }

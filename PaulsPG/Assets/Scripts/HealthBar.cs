@@ -16,11 +16,4 @@ public class HealthBar : MonoBehaviour
         healthBar.fillAmount = health / startHealth;
     }
 
-    public void Healing(int healPoints)
-    {
-        startHealth += healPoints;
-        startHealth = Mathf.Clamp(startHealth, 0, 100);
-
-        healthBar.fillAmount = startHealth / 100;
-    }
 }

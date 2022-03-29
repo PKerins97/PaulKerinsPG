@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -421,6 +421,7 @@ MonoBehaviour:
   target: {fileID: 2040434730}
   speed: 1
   howclose: 10
+  DPS: 10
 --- !u!54 &902062584
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1197,6 +1198,8 @@ MonoBehaviour:
   turnTime: 0.2
   speedTime: 0.1
   points: 0
+  MHP: 100
+  CHP: 0
   MainCharacter: {fileID: 1904663077}
 --- !u!4 &2040434730
 Transform:
@@ -1323,8 +1326,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8375024316142350625}
   m_LocalRotation: {x: 0.048055973, y: -0.5886624, z: 0.7677012, w: 0.24860026}
-  m_LocalPosition: {x: 0.061576, y: -0.047057, z: -0.034345}
-  m_LocalScale: {x: 0.50000006, y: 0.48862013, z: 0.5000001}
+  m_LocalPosition: {x: 0.01, y: -0.062, z: 0.015}
+  m_LocalScale: {x: 0.44086006, y: 0.43082616, z: 0.44086012}
   m_Children: []
   m_Father: {fileID: 779102985}
   m_RootOrder: 1
@@ -1343,7 +1346,7 @@ GameObject:
   - component: {fileID: 8375024316142350627}
   m_Layer: 0
   m_Name: Sword
-  m_TagString: Sword
+  m_TagString: Weapon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

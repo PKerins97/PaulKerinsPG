@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class ManagerScript : MonoBehaviour
 {
+    
+    
+    List<EnemyScript> allEnemys;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -17,6 +21,14 @@ public class ManagerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
+    }
+
+    internal void Im_Dead(EnemyScript enemy)
+    {
+       
+            EnemyScript killed_enemy = enemy as EnemyScript;
+            allEnemys.Remove(killed_enemy);
         
     }
 }

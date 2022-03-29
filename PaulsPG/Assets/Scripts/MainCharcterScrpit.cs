@@ -26,7 +26,9 @@ public class MainCharcterScrpit : MonoBehaviour, IDamageable
     float turnVelocity;
 
     public int points = 0;
-
+    public int MHP = 100;
+    public int CHP;
+    
 
 
     
@@ -38,7 +40,7 @@ public class MainCharcterScrpit : MonoBehaviour, IDamageable
         cameraT = Camera.main.transform;
         
         rigg = GetComponent<Rigidbody>();
-        
+        CHP = MHP;
         ; }
 
     void Update()
@@ -222,6 +224,13 @@ public class MainCharcterScrpit : MonoBehaviour, IDamageable
     public void takeDamage(int amountOfDamage)
     {
         print("Ouch");
+        CHP -= amountOfDamage;
+        healthBar.onTakeDamage(CHP);
+        if(CHP <= 0)
+        {
+            char_animation.SetBool("died", true);
+        }
+        
         
     }
 
