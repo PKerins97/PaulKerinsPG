@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HealthBar : MonoBehaviour
+public class HealthBar : MonoBehaviour, IDamageable
 {
     public Image healthBar;
     public float health;
     public float startHealth = 100;
 
 
-    public void  onTakeDamage(int damage)
+   
+
+    public void takeDamage(int amountOfDamage)
     {
-        health = health - damage;
+        health = health - amountOfDamage;
         healthBar.fillAmount = health / startHealth;
     }
-
 }

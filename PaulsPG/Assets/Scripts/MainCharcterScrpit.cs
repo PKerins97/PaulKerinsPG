@@ -121,7 +121,7 @@ public class MainCharcterScrpit : MonoBehaviour, IDamageable
         {
             if (healthBar)
             {
-                healthBar.onTakeDamage(10);
+                healthBar.takeDamage(10);
                 
                 
             }
@@ -131,16 +131,17 @@ public class MainCharcterScrpit : MonoBehaviour, IDamageable
 
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider collider)
     {
-        if(other.tag == "Enemy" && isAttacking )
+        IDamageable damageable = collider.GetComponent<IDamageable>();
+        if(damageable != null )
         {
-            print(other.name);
-            other.GetComponent<Animator>().SetTrigger("Hit");
+            damageable.takeDamage(20);
            
         }
     }
 
+    
 
     public void SwordAttack()
     {
@@ -225,7 +226,7 @@ public class MainCharcterScrpit : MonoBehaviour, IDamageable
     {
         print("Ouch");
         CHP -= amountOfDamage;
-        healthBar.onTakeDamage(CHP);
+        healthBar.takeDamage(amountOfDamage);
         if(CHP <= 0)
         {
             char_animation.SetBool("died", true);

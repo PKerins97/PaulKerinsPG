@@ -22,7 +22,7 @@ public class EnemyScript : MonoBehaviour,IDamageable
    public int CHP;
     public int DPS = 10;
     private float Attack_Time = 0.8f;
-    private float coolDown;
+    private float coolDown= 2f;
     private IDamageable targetHealth;
 
     // Start is called before the first frame update
@@ -70,6 +70,13 @@ public class EnemyScript : MonoBehaviour,IDamageable
                     enemy_animation.SetBool("attacking", true);
                     targetHealth = target.GetComponent<IDamageable>();
                 }
+
+                else if (dist > 3f)
+                {
+                    isCurrently = Enemy_States.Idle;
+                    enemy_animation.SetBool("running_forwards", false);
+                }
+
                 break;
 
             case Enemy_States.Attack:
@@ -85,28 +92,41 @@ public class EnemyScript : MonoBehaviour,IDamageable
                 else
                     targetHealth = target.GetComponent<IDamageable>();
 
+
+                if(dist > 1.5)
+                {
+                    isCurrently = Enemy_States.Move_to_Target;
+                    enemy_animation.SetBool("running_forwards", true);
+                    enemy_animation.SetBool("attacking", false);
+
+                }
+
+                if (CHP <= 0)
+                {
+                    isCurrently = Enemy_States.Dead;
+                    enemy_animation.SetBool("attacking", false);
+                    enemy_animation.SetBool("died", true);
+                }
                 break;
 
             case Enemy_States.Dead:
                
+                
 
 
                 break;
 
         }
 
-        if (Input.GetKeyDown(KeyCode.H))
-        {
-            takeDamage(40);
-        }
+        
     }
     internal void ImtheMan(ManagerScript manager)
     {
         theManager = manager;
     }
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider collision)
     {
-        if (collision.gameObject.tag == "Weapon")
+        if (collision.gameObject.tag == "Weapon" && collision.gameObject.tag == "Player")
         {
             print("hit");
             takeDamage(20);
@@ -118,12 +138,12 @@ public class EnemyScript : MonoBehaviour,IDamageable
     {
         print("Hit");
         CHP -= amountOfDamage;
-
+        
         if (CHP <= 0) 
         {
            
             enemy_animation.SetBool("died", true);
-            theManager.Im_Dead(this); 
+            //theManager.Im_Dead(this); 
         }
     }
 
