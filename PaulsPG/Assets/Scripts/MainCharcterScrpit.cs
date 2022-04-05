@@ -26,7 +26,9 @@ public class MainCharcterScrpit : MonoBehaviour, IDamageable
     float turnVelocity;
 
     public int points = 0;
-
+    public int MHP = 100;
+    public int CHP;
+    
 
 
     
@@ -38,7 +40,7 @@ public class MainCharcterScrpit : MonoBehaviour, IDamageable
         cameraT = Camera.main.transform;
         
         rigg = GetComponent<Rigidbody>();
-        
+        CHP = MHP;
         ; }
 
     void Update()
@@ -119,7 +121,7 @@ public class MainCharcterScrpit : MonoBehaviour, IDamageable
         {
             if (healthBar)
             {
-                healthBar.onTakeDamage(10);
+                healthBar.takeDamage(10);
                 
                 
             }
@@ -129,16 +131,17 @@ public class MainCharcterScrpit : MonoBehaviour, IDamageable
 
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider collider)
     {
-        if(other.tag == "Enemy" && isAttacking )
+        IDamageable damageable = collider.GetComponent<IDamageable>();
+        if(damageable != null )
         {
-            print(other.name);
-            other.GetComponent<Animator>().SetTrigger("Hit");
+            damageable.takeDamage(20);
            
         }
     }
 
+    
 
     public void SwordAttack()
     {
@@ -222,6 +225,13 @@ public class MainCharcterScrpit : MonoBehaviour, IDamageable
     public void takeDamage(int amountOfDamage)
     {
         print("Ouch");
+        CHP -= amountOfDamage;
+        healthBar.takeDamage(amountOfDamage);
+        if(CHP <= 0)
+        {
+            char_animation.SetBool("died", true);
+        }
+        
         
     }
 

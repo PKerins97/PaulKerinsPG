@@ -16,9 +16,14 @@ public class EnemyScript : MonoBehaviour,IDamageable
     public float howclose;
     private float dist;
     private Rigidbody enemy;
-    
-   private int maxHealth = 60;
-    private int currentHealth;
+    internal ManagerScript theManager;
+
+   public int MHP = 60;
+   public int CHP;
+    public int DPS = 10;
+    private float Attack_Time = 0.8f;
+    private float coolDown= 2f;
+    private IDamageable targetHealth;
 
     // Start is called before the first frame update
     void Start()
@@ -26,7 +31,7 @@ public class EnemyScript : MonoBehaviour,IDamageable
         enemy_animation = GetComponentInChildren<Animator>();
         target = GameObject.FindGameObjectWithTag("Player").transform;
 
-        currentHealth = maxHealth;
+        CHP = MHP;
     }
 
     // Update is called once per frame
@@ -59,50 +64,72 @@ public class EnemyScript : MonoBehaviour,IDamageable
                 transform.LookAt(transform.position + direction);
 
                 if (dist < 1.5f)
+                {
                     isCurrently = Enemy_States.Attack;
+                    enemy_animation.SetBool("running_forwards", false);
+                    enemy_animation.SetBool("attacking", true);
+                    targetHealth = target.GetComponent<IDamageable>();
+                }
+
+                else if (dist > 3f)
+                {
+                    isCurrently = Enemy_States.Idle;
+                    enemy_animation.SetBool("running_forwards", false);
+                }
 
                 break;
 
             case Enemy_States.Attack:
-                enemy_animation.SetBool("running_forwards", false);
-                enemy_animation.SetBool("attacking",true);
-                IDamageable taregtScript =  target.GetComponent<IDamageable>();
-                if (taregtScript != null)
+
+                coolDown -= Time.deltaTime;
+
+                if (coolDown <0f)
+                if (targetHealth != null)
                 {
-                    taregtScript.takeDamage(10);
+                    targetHealth.takeDamage(10);
+                    coolDown = Attack_Time;
+                }
+                else
+                    targetHealth = target.GetComponent<IDamageable>();
+
+
+                if(dist > 1.5)
+                {
+                    isCurrently = Enemy_States.Move_to_Target;
+                    enemy_animation.SetBool("running_forwards", true);
+                    enemy_animation.SetBool("attacking", false);
+
                 }
 
+                if (CHP <= 0)
+                {
+                    isCurrently = Enemy_States.Dead;
+                    enemy_animation.SetBool("attacking", false);
+                    enemy_animation.SetBool("died", true);
+                }
                 break;
 
             case Enemy_States.Dead:
-                    if(currentHealth == 0)
-                {
-                    enemy_animation.SetBool("died", true);
-                    Destroy(gameObject);
-                }
+               
+                
+
+
                 break;
 
-
-
-
-
-           
-
-
         }
 
-        if (Input.GetKey(KeyCode.E))
-        {
-            takeDamage(10);
-        }
+        
     }
-   
-    private void OnCollisionEnter(Collision collision)
+    internal void ImtheMan(ManagerScript manager)
     {
-        if (collision.gameObject.tag == "Player")
+        theManager = manager;
+    }
+    private void OnTriggerEnter(Collider collision)
+    {
+        if (collision.gameObject.tag == "Weapon" && collision.gameObject.tag == "Player")
         {
             print("hit");
-            
+            takeDamage(20);
 
         }
     }
@@ -110,5 +137,15 @@ public class EnemyScript : MonoBehaviour,IDamageable
     public void takeDamage(int amountOfDamage)
     {
         print("Hit");
+        CHP -= amountOfDamage;
+        
+        if (CHP <= 0) 
+        {
+           
+            enemy_animation.SetBool("died", true);
+            //theManager.Im_Dead(this); 
+        }
     }
+
+    
 }
