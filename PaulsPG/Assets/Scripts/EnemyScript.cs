@@ -22,7 +22,7 @@ public class EnemyScript : MonoBehaviour,IDamageable
    public int CHP;
     public int DPS = 10;
     private float Attack_Time = 0.8f;
-    private float coolDown= 2f;
+    private float coolDown= 6f;
     private IDamageable targetHealth;
 
     // Start is called before the first frame update
@@ -86,7 +86,7 @@ public class EnemyScript : MonoBehaviour,IDamageable
                 if (coolDown <0f)
                 if (targetHealth != null)
                 {
-                    targetHealth.takeDamage(10);
+                    targetHealth.takeDamage(5);
                     coolDown = Attack_Time;
                 }
                 else
@@ -128,10 +128,10 @@ public class EnemyScript : MonoBehaviour,IDamageable
     {
         if (collision.gameObject.tag == "Weapon" && collision.gameObject.tag == "Player")
         {
-            print("hit");
-            takeDamage(20);
+            print("12");
+           takeDamage(20);
 
-        }
+       }
     }
 
     public void takeDamage(int amountOfDamage)

@@ -28,13 +28,23 @@ public class MainCharcterScrpit : MonoBehaviour, IDamageable
     public int points = 0;
     public int MHP = 100;
     public int CHP;
-    
 
+    GameObject punch, sword;
 
-    
+    enum CharacterState { punching, swording, nothing}
+    CharacterState isCurrently = CharacterState.nothing;
     public GameObject MainCharacter;
     void Start()
     {
+        Transform[] all_bones = gameObject.GetComponentsInChildren<Transform>();
+        foreach (Transform bone in all_bones)
+        {
+            if (bone.gameObject.name.Contains("Sword"))
+                sword = bone.gameObject;
+            if (bone.gameObject.name == "B-hand_L")
+                punch = bone.gameObject;
+        }
+
         current_speed = RUNNING_SPEED;
         char_animation = GetComponentInChildren<Animator>();
         cameraT = Camera.main.transform;
@@ -131,15 +141,16 @@ public class MainCharcterScrpit : MonoBehaviour, IDamageable
 
     }
 
-    private void OnTriggerEnter(Collider collider)
-    {
-        IDamageable damageable = collider.GetComponent<IDamageable>();
-        if(damageable != null )
-        {
-            damageable.takeDamage(20);
+    //private void OnTriggerEnter(Collider collider)
+    //{
+    //    IDamageable damageable = collider.GetComponent<IDamageable>();
+    //    if(damageable != null )
+    //    {
+    //        print("34");
+    //        damageable.takeDamage(20);
            
-        }
-    }
+    //    }
+    //}
 
     
 
@@ -148,7 +159,7 @@ public class MainCharcterScrpit : MonoBehaviour, IDamageable
         isAttacking = true;
         char_animation.SetTrigger("attack");
         CanAttack = false;
-       
+        isCurrently = CharacterState.swording;
         StartCoroutine(ResetAttackCooldown());
 
     }
@@ -157,7 +168,7 @@ public class MainCharcterScrpit : MonoBehaviour, IDamageable
         isAttacking = true;
         char_animation.SetTrigger("Punch");
         CanAttack = false;
-
+        isCurrently = CharacterState.punching;
         StartCoroutine(ResetAttackCooldown());
 
     }
@@ -167,20 +178,50 @@ public class MainCharcterScrpit : MonoBehaviour, IDamageable
         StartCoroutine(ResetAttack());
         yield return new WaitForSeconds(AttackCooldown);
         CanAttack = true;
+        isCurrently = CharacterState.nothing;
     }
     IEnumerator ResetAttack()
     {
 
         yield return new WaitForSeconds(1.0f);
         isAttacking = false;
+        check_for_hit();
+
     }
 
-    
+    private void check_for_hit()
+    {
+        Collider[] hit_objects;
 
-   
+        switch (isCurrently)
+        {
+            case CharacterState.swording:
+
+                 hit_objects = Physics.OverlapSphere(sword.transform.position + sword.transform.up, 0.5f);
+                break;
+
+            case CharacterState.punching:
+
+                hit_objects = Physics.OverlapSphere(punch.transform.position , 0.5f);
+                break;
+
+            default:
+                hit_objects = new Collider[0];
+
+                break;
 
 
-
+        }
+        foreach (Collider obj in hit_objects)
+        {
+           if (this != obj.gameObject.GetComponent<MainCharcterScrpit>())
+            {
+                IDamageable obj_damage = obj.GetComponent<IDamageable>();
+                if (obj_damage != null)
+                    obj_damage.takeDamage(20);
+            }
+        }
+    }
 
     private void turn(float mouse_turn_value_x)
     {
