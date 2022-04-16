@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class EnemyScript : MonoBehaviour,IDamageable
 {
@@ -8,7 +9,8 @@ public class EnemyScript : MonoBehaviour,IDamageable
     enum Enemy_States { Idle, Move_to_Target, Attack, Dead};
 
     Enemy_States isCurrently = Enemy_States.Idle;
-
+    [SerializeField] private Transform movePositionTransform;
+    private NavMeshAgent navMeshAgent;
 
     public Transform target;
     public float speed = 1f;
@@ -23,8 +25,12 @@ public class EnemyScript : MonoBehaviour,IDamageable
     public int DPS = 10;
     private float Attack_Time = 0.8f;
     private float coolDown= 6f;
+    
     private IDamageable targetHealth;
-
+    private void Awake()
+    {
+        navMeshAgent = GetComponent<NavMeshAgent>();
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -61,7 +67,9 @@ public class EnemyScript : MonoBehaviour,IDamageable
                 fromMetoTarget = new Vector3(fromMetoTarget.x, 0, fromMetoTarget.z);
                 Vector3 direction = fromMetoTarget.normalized;
                 transform.position += speed * direction * Time.deltaTime;
+                navMeshAgent.destination = movePositionTransform.position * Time.deltaTime;
                 transform.LookAt(transform.position + direction);
+                
 
                 if (dist < 1.5f)
                 {
@@ -75,6 +83,7 @@ public class EnemyScript : MonoBehaviour,IDamageable
                 {
                     isCurrently = Enemy_States.Idle;
                     enemy_animation.SetBool("running_forwards", false);
+                    navMeshAgent.Stop();
                 }
 
                 break;
@@ -141,9 +150,11 @@ public class EnemyScript : MonoBehaviour,IDamageable
         
         if (CHP <= 0) 
         {
-           
+            isCurrently = Enemy_States.Dead;  
             enemy_animation.SetBool("died", true);
-            //theManager.Im_Dead(this); 
+            Destroy(gameObject, 5f);
+
+
         }
     }
 

@@ -12,12 +12,19 @@ public class PickUpObject : MonoBehaviour
     }
     private void OnTriggerEnter(Collider collider)
     {
-        if(collider.gameObject.tag == "Player")
+        if( collider.gameObject.tag == "Player")
         {
 
             collider.GetComponent<MainCharcterScrpit>().points++;
             print("Item Picked Up");
             Destroy(gameObject); 
+        }
+
+        if (this.gameObject.tag == "healthBottle " && collider.gameObject.tag == "Player")
+        {
+            collider.GetComponent<MainCharcterScrpit>();
+            print("health gained");
+            Destroy(gameObject);
         }
     }
 }
