@@ -147,10 +147,17 @@ public class MainCharcterScrpit : MonoBehaviour, IDamageable
             
         }
 
+        if(collision.gameObject.tag == "coin")
+        {
+            points++;
+        }
 
-        if(collision.gameObject.tag == "healthBottle")
+
+        if(collision.gameObject.tag == "health")
         {
             CHP = MHP;
+            healthBar.heal(100);
+            
         }
 
 
