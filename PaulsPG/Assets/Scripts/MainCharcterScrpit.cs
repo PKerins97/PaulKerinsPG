@@ -30,9 +30,9 @@ public class MainCharcterScrpit : MonoBehaviour, IDamageable
     public int CHP;
 
     GameObject punch, sword;
-
-    enum CharacterState { punching, swording, nothing}
-    CharacterState isCurrently = CharacterState.nothing;
+    
+    enum CharacterState { Idle,punching, swording, Died}
+    CharacterState isCurrently = CharacterState.Idle;
     public GameObject MainCharacter;
     void Start()
     {
@@ -57,18 +57,22 @@ public class MainCharcterScrpit : MonoBehaviour, IDamageable
     {
         char_animation.SetBool("running_forward", false);
         char_animation.SetBool("walking_backwards", false);
+        char_animation.SetBool("walking_left", false);
+        char_animation.SetBool("walking_right", false);
         char_animation.SetBool("jumping", false);
         char_animation.SetBool("sprint", false);
         isAttacking = false;
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
         
-
-
 
 
 
         if (should_move_forward()) move_forward();
         if (should_move_backward()) move_backward();
-        //if (should_turn_left()) turn_left();
+        if (should_move_left()) move_left();
+        if (should_move_right()) move_right();
         turn(Input.GetAxis("Horizontal"));
         
 
@@ -127,6 +131,11 @@ public class MainCharcterScrpit : MonoBehaviour, IDamageable
 
         }
 
+        if(collision.gameObject.tag == "Border")
+        {
+            transform.Rotate(0, -180, 0);
+        }
+
         if(collision.gameObject.tag == "Enemy")
         {
             if (healthBar)
@@ -138,20 +147,23 @@ public class MainCharcterScrpit : MonoBehaviour, IDamageable
             
         }
 
+        if(collision.gameObject.tag == "coin")
+        {
+            points++;
+        }
+
+
+        if(collision.gameObject.tag == "health")
+        {
+            CHP = MHP;
+            healthBar.heal(100);
+            
+        }
+
 
     }
 
-    //private void OnTriggerEnter(Collider collider)
-    //{
-    //    IDamageable damageable = collider.GetComponent<IDamageable>();
-    //    if(damageable != null )
-    //    {
-    //        print("34");
-    //        damageable.takeDamage(20);
-           
-    //    }
-    //}
-
+  
     
 
     public void SwordAttack()
@@ -178,7 +190,7 @@ public class MainCharcterScrpit : MonoBehaviour, IDamageable
         StartCoroutine(ResetAttack());
         yield return new WaitForSeconds(AttackCooldown);
         CanAttack = true;
-        isCurrently = CharacterState.nothing;
+        isCurrently = CharacterState.Idle;
     }
     IEnumerator ResetAttack()
     {
@@ -229,15 +241,26 @@ public class MainCharcterScrpit : MonoBehaviour, IDamageable
         if (Mathf.Abs(mouse_turn_value_x) > 0.5f) char_animation.SetBool("walking_backwards", true);
     }
 
-    private void turn_left()
+    private void move_left()
     {
-        transform.Rotate(Vector3.up, -turning_speed * Time.deltaTime);
-        char_animation.SetBool("walking_backwards", true);
+        transform.position -= BACKWARDS_SPEED * transform.right * Time.deltaTime;
+        char_animation.SetBool("walking_left", true);
     }
 
-    private bool should_turn_left()
+    private bool should_move_left()
     {
         return Input.GetKey(KeyCode.A);
+    }
+
+    private void move_right()
+    {
+        transform.position += BACKWARDS_SPEED * transform.right * Time.deltaTime;
+        char_animation.SetBool("walking_right", true);
+    }
+
+    private bool should_move_right()
+    {
+        return Input.GetKey(KeyCode.D);
     }
 
     private void move_backward()

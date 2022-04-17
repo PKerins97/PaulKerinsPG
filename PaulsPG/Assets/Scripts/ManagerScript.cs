@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ManagerScript : MonoBehaviour
 {
+    public GameObject enemy_prefab_template;
+
     
     
     List<EnemyScript> allEnemys;
@@ -11,6 +13,8 @@ public class ManagerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
+        allEnemys = new List<EnemyScript>();
         for (int i = 0; i<100; i++)
         {
            GameObject g= GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -26,9 +30,14 @@ public class ManagerScript : MonoBehaviour
 
     internal void Im_Dead(EnemyScript enemy)
     {
-       
+        if(enemy is EnemyScript) {
             EnemyScript killed_enemy = enemy as EnemyScript;
-            allEnemys.Remove(killed_enemy);
+            
+            
+            
+        }
+       
+            
         
     }
 }

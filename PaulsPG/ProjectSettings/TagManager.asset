@@ -7,6 +7,9 @@ TagManager:
   - floor
   - Enemy
   - Weapon
+  - Border
+  - coin
+  - health
   layers:
   - Default
   - TransparentFX

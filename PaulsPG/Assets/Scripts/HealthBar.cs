@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,5 +17,11 @@ public class HealthBar : MonoBehaviour, IDamageable
     {
         health = health - amountOfDamage;
         healthBar.fillAmount = health / startHealth;
+    }
+
+    public void heal(object healthAmount)
+    {
+        health = startHealth;
+        health = Mathf.Min(health, startHealth);
     }
 }

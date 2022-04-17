@@ -4,20 +4,31 @@ using UnityEngine;
 
 public class PickUpObject : MonoBehaviour
 {
-
+    public float healAmount;
 
     private void Update()
     {
-        transform.Rotate( 90 * Time.deltaTime,0, 0);
+        transform.Rotate(90 * Time.deltaTime, 0, 0);
     }
     private void OnTriggerEnter(Collider collider)
     {
-        if(collider.gameObject.tag == "Player")
+        if (collider.gameObject.tag == "Player")
         {
 
-            collider.GetComponent<MainCharcterScrpit>().points++;
+            
             print("Item Picked Up");
-            Destroy(gameObject); 
+            Destroy(gameObject);
         }
+
+        HealthBar healthbar = collider.GetComponent<HealthBar>();
+        if (healthbar)
+        {
+            healthbar.heal(healAmount);
+
+        }
+
     }
+
+
+
 }
