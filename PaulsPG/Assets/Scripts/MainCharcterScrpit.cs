@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class MainCharcterScrpit : MonoBehaviour, IDamageable
 {
@@ -26,8 +28,9 @@ public class MainCharcterScrpit : MonoBehaviour, IDamageable
     float turnVelocity;
 
     public int points = 0;
-    public int MHP = 100;
-    public int CHP;
+    public float MHP = 100;
+    public float CHP;
+   
 
     GameObject punch, sword;
     
@@ -51,6 +54,7 @@ public class MainCharcterScrpit : MonoBehaviour, IDamageable
         
         rigg = GetComponent<Rigidbody>();
         CHP = MHP;
+        
         ; }
 
     void Update()
@@ -65,6 +69,7 @@ public class MainCharcterScrpit : MonoBehaviour, IDamageable
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
         
 
 
@@ -121,11 +126,11 @@ public class MainCharcterScrpit : MonoBehaviour, IDamageable
 
     private void OnCollisionEnter(Collision collision)
     {
-        print("collision");
+        
         if (collision.gameObject.tag == "floor")
 
         {
-            print("floor");
+            
             char_animation.SetBool("jump_landing", true);
             isGrounded = true;
 
@@ -150,13 +155,20 @@ public class MainCharcterScrpit : MonoBehaviour, IDamageable
         if(collision.gameObject.tag == "coin")
         {
             points++;
+            if (points == 5) 
+            {
+                CHP = MHP;
+                healthBar.heal(100);
+            }
+
         }
 
 
         if(collision.gameObject.tag == "health")
         {
-            CHP = MHP;
+            CHP += 100;
             healthBar.heal(100);
+            
             
         }
 
@@ -231,6 +243,7 @@ public class MainCharcterScrpit : MonoBehaviour, IDamageable
                 IDamageable obj_damage = obj.GetComponent<IDamageable>();
                 if (obj_damage != null)
                     obj_damage.takeDamage(20);
+
             }
         }
     }
@@ -294,6 +307,7 @@ public class MainCharcterScrpit : MonoBehaviour, IDamageable
         if(CHP <= 0)
         {
             char_animation.SetBool("died", true);
+            
         }
         
         
