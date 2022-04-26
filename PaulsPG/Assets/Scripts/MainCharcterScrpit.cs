@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
+
 
 public class MainCharcterScrpit : MonoBehaviour, IDamageable
 {
@@ -243,6 +243,7 @@ public class MainCharcterScrpit : MonoBehaviour, IDamageable
                 IDamageable obj_damage = obj.GetComponent<IDamageable>();
                 if (obj_damage != null)
                     obj_damage.takeDamage(20);
+                //set up particles here
 
             }
         }
