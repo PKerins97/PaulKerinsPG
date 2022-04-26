@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class PickUpObject : MonoBehaviour
 {
-    public float healAmount;
+    public float healAmount ;
 
     private void Update()
     {
