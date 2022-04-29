@@ -4,20 +4,20 @@ using UnityEngine;
 
 public class ManagerScript : MonoBehaviour
 {
-    public GameObject enemy_prefab_template;
+    public GameObject pickUpItems;
 
     
     
-    List<EnemyScript> allEnemys;
+    
 
     // Start is called before the first frame update
     void Start()
     {
 
-        allEnemys = new List<EnemyScript>();
-        for (int i = 0; i<100; i++)
+        
+        for (int i = 0; i<10; i++)
         {
-           GameObject g= GameObject.CreatePrimitive(PrimitiveType.Cube);
+            GameObject g = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             g.transform.position = new Vector3(Random.Range(-50f, 50f), Random.Range(-50f, 50f), Random.Range(-50f, 50f));
         }
     }
