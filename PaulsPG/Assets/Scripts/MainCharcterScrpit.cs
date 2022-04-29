@@ -30,6 +30,7 @@ public class MainCharcterScrpit : MonoBehaviour, IDamageable
     public int points = 0;
     public float MHP = 100;
     public float CHP;
+    private float DPS = 10f;
    
 
     GameObject punch, sword;
