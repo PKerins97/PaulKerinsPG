@@ -21,12 +21,7 @@ public class PickUpObject : MonoBehaviour
             Destroy(gameObject);
         }
 
-        HealthBar healthbar = collider.GetComponent<HealthBar>();
-        if (healthbar)
-        {
-            healthbar.heal(healAmount);
-
-        }
+       
 
     }
 

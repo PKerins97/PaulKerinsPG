@@ -6,22 +6,39 @@ using UnityEngine.UI;
 
 public class HealthBar : MonoBehaviour, IDamageable
 {
-    public Image healthBar;
-    public float health;
-    public float startHealth = 100;
+    public float updatedhealth;
+    public float maxHealth;
+    public float pointIncreasePerSecond;
+    public Text healthUI;
 
+    void Start()
+    {
+        maxHealth = 100;
+        updatedhealth = 100;
+        pointIncreasePerSecond = 1f;
 
-   
+    }
+
+    void Update()
+    {
+        updatedhealth += pointIncreasePerSecond * Time.deltaTime;
+
+        if (updatedhealth > maxHealth)
+        {
+            updatedhealth = 100;
+        }
+        if (updatedhealth < 0)
+        {
+            updatedhealth = 0;
+        }
+        healthUI.text = (int)updatedhealth + " Health";
+    }
 
     public void takeDamage(int amountOfDamage)
     {
-        health = health - amountOfDamage;
-        healthBar.fillAmount = health / startHealth;
+        updatedhealth = updatedhealth - amountOfDamage;
+        healthUI.text = (int)updatedhealth + "Health";
     }
 
-    public void heal(object healthAmount)
-    {
-        health = startHealth;
-        health = Mathf.Min(health, startHealth);
-    }
+   
 }

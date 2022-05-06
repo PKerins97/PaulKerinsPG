@@ -10,6 +10,8 @@ TagManager:
   - Border
   - coin
   - health
+  - Collide
+  - EndGame
   layers:
   - Default
   - TransparentFX

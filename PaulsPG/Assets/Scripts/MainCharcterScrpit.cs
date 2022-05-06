@@ -3,22 +3,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+
 
 
 public class MainCharcterScrpit : MonoBehaviour, IDamageable
 {
     private float current_speed;
-    private float BACKWARDS_SPEED = 1, RUNNING_SPEED = 4, SPRINT_SPEED = 8;
+    private float BACKWARDS_SPEED = 2, RUNNING_SPEED = 5, SPRINT_SPEED = 10;
     private float turning_speed = 220;
     private float mouse_sesitivity_x = 0.05f;
     Animator char_animation;
     private bool isGrounded = true;
     Transform cameraT;
     private Rigidbody rigg;
-    public HealthBar healthBar;
+    public Text healthUI;
     public bool CanAttack = true;
     public float AttackCooldown = 0.01f;
-    public bool isAttacking = false;
+    public bool isAttacking = false; 
     
 
     public float turnTime = 0.2f;
@@ -28,12 +30,15 @@ public class MainCharcterScrpit : MonoBehaviour, IDamageable
     float turnVelocity;
 
     public int points = 0;
-    public float MHP = 100;
+    public float MHP;
     public float CHP;
+    public float pointsIncreasedPerSecond;
     private float DPS = 10f;
-   
 
+    
+    private float coolDown = 4f;
     GameObject punch, sword;
+
     
     enum CharacterState { Idle,punching, swording, Died}
     CharacterState isCurrently = CharacterState.Idle;
@@ -43,9 +48,9 @@ public class MainCharcterScrpit : MonoBehaviour, IDamageable
         Transform[] all_bones = gameObject.GetComponentsInChildren<Transform>();
         foreach (Transform bone in all_bones)
         {
-            if (bone.gameObject.name.Contains("Sword"))
+            if (bone.gameObject.name.Contains("MayaSword"))
                 sword = bone.gameObject;
-            if (bone.gameObject.name == "B-hand_L")
+            if (bone.gameObject.name == "Character L Hand")
                 punch = bone.gameObject;
         }
 
@@ -54,8 +59,9 @@ public class MainCharcterScrpit : MonoBehaviour, IDamageable
         cameraT = Camera.main.transform;
         
         rigg = GetComponent<Rigidbody>();
-        CHP = MHP;
-        
+        MHP = 100;
+        CHP = 100;
+        pointsIncreasedPerSecond = 1f;
         ; }
 
     void Update()
@@ -68,11 +74,23 @@ public class MainCharcterScrpit : MonoBehaviour, IDamageable
         char_animation.SetBool("sprint", false);
         isAttacking = false;
 
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        //Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.visible = false;
 
+
+
+        CHP += pointsIncreasedPerSecond * Time.deltaTime;
+
+        if (CHP > MHP)
+        {
+            CHP = 100;
+        }
+        if (CHP < 0)
+        {
+            CHP = 0;
+        }
         
-
+        healthUI.text = (int)CHP + " Health";
 
 
         if (should_move_forward()) move_forward();
@@ -142,38 +160,22 @@ public class MainCharcterScrpit : MonoBehaviour, IDamageable
             transform.Rotate(0, -180, 0);
         }
 
-        if(collision.gameObject.tag == "Enemy")
-        {
-            if (healthBar)
-            {
-                healthBar.takeDamage(10);
-                
-                
-            }
-            
-        }
+        
 
         if(collision.gameObject.tag == "coin")
         {
             points++;
-            if (points == 5) 
-            {
-                CHP = MHP;
-                healthBar.heal(100);
-            }
+            
 
         }
 
 
-        if(collision.gameObject.tag == "health")
+       
+
+        if (collision.gameObject.tag == "EndGame")
         {
-            CHP += 100;
-            healthBar.heal(100);
-            
-            
+            SceneManager.LoadScene("WinnerScene");
         }
-
-
     }
 
   
@@ -305,15 +307,20 @@ public class MainCharcterScrpit : MonoBehaviour, IDamageable
     {
         print("Ouch");
         CHP -= amountOfDamage;
-        healthBar.takeDamage(amountOfDamage);
+        
         if(CHP <= 0)
         {
             char_animation.SetBool("died", true);
-            
+            if (coolDown > 0f)
+            {
+                SceneManager.LoadScene("GameOverMenu");
+            }
         }
         
         
     }
+
+  
 
     private void OnGUI()
     {
