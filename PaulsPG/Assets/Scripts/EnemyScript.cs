@@ -98,11 +98,19 @@ public class EnemyScript : MonoBehaviour,IDamageable
                     targetHealth.takeDamage(5);
                     coolDown = Attack_Time;
                 }
+                else if ( targetHealth == null)
+                    {
+                        isCurrently = Enemy_States.Idle;
+                        enemy_animation.SetBool("attacking", false); 
+                    }
+                
                 else
-                    targetHealth = target.GetComponent<IDamageable>();
+                {
+
+                }
 
 
-                if(dist > 1.5)
+                if (dist > 1.5)
                 {
                     isCurrently = Enemy_States.Move_to_Target;
                     enemy_animation.SetBool("running_forwards", true);
